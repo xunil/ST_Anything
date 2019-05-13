@@ -114,11 +114,11 @@
 //ESP832 WiFi Information
 //******************************************************************************************
 String str_ssid     = "nope";                           //  <---You must edit this line!
-String str_password = "noway";                   //  <---You must edit this line!
-IPAddress ip(192, 168, 1, 12);       //Device IP Address       //  <---You must edit this line!
-IPAddress gateway(192, 168, 1, 1);    //Router gateway          //  <---You must edit this line!
-IPAddress subnet(255, 255, 255, 0);   //LAN subnet mask         //  <---You must edit this line!
-IPAddress dnsserver(192, 168, 1, 1);  //DNS server              //  <---You must edit this line!
+String str_password = "howay";                   //  <---You must edit this line!
+//IPAddress ip(192, 168, 1, 12);       //Device IP Address       //  <---You must edit this line!
+//IPAddress gateway(192, 168, 1, 1);    //Router gateway          //  <---You must edit this line!
+//IPAddress subnet(255, 255, 255, 0);   //LAN subnet mask         //  <---You must edit this line!
+//IPAddress dnsserver(192, 168, 1, 1);  //DNS server              //  <---You must edit this line!
 const unsigned int serverPort = 8090; // port to run the http server on
 
 // Smartthings / Hubitat Hub TCP/IP Address
@@ -188,36 +188,9 @@ void setup()
   //           to match your specific use case in the ST Phone Application.
   //******************************************************************************************
   //Polling Sensors
-/*
-  static st::PS_Water               sensor1(F("water1"), 60, 0, PIN_WATER_1, 500);
-  static st::PS_Water               sensor2(F("water2"), 60, 10, PIN_WATER_2, 500);
-  static st::PS_Illuminance         sensor3(F("illuminance1"), 60, 20, PIN_ILLUMINANCE_1, 0, 4095, 0, 10000);
-  static st::PS_Illuminance         sensor4(F("illuminance2"), 60, 30, PIN_ILLUMINANCE_2, 0, 4095, 0, 10000);
-  static st::PS_Voltage             sensor5(F("voltage1"), 60, 40, PIN_VOLTAGE_1, 0, 4095, 0, 3300, 1, 100);
-//  static st::PS_Voltage             sensor5(F("voltage1"), 5, 1, PIN_VOLTAGE_1, 0, 4095, 0, 4095, 20, 75,  -0.000000025934, 0.0001049656215,  0.9032840665333,  204.642825355678);
-  static st::PS_MQ2_Smoke           sensor6(F("smoke1"), 10, 3, PIN_SMOKE_1, 1000);
-  static st::PS_TemperatureHumidity sensor7(F("temphumid1"), 15, 5, PIN_TEMPERATUREHUMIDITY_1, st::PS_TemperatureHumidity::DHT22,"temperature1","humidity1");
-  static st::PS_DS18B20_Temperature sensor8(F("temperature2"), 60, 55, PIN_TEMPERATURE_2, false, 10, 1); 
-
-  //Interrupt Sensors 
-  static st::IS_Motion              sensor9(F("motion1"), PIN_MOTION_1, HIGH, false, 500);
-  static st::IS_Motion              sensor10(F("motion2"), PIN_MOTION_2, HIGH, false, 500);
-  static st::IS_Contact             sensor11(F("contact1"), PIN_CONTACT_1, LOW, true, 500);
-  static st::IS_Contact             sensor12(F("contact2"), PIN_CONTACT_2, LOW, true, 500);
-  static st::IS_Smoke               sensor13(F("smoke2"), PIN_SMOKE_2, HIGH, true, 500);
-  static st::IS_Button              sensor14(F("button1"), PIN_BUTTON_1, 1000, LOW, true, 500);
-  static st::IS_Button              sensor15(F("button2"), PIN_BUTTON_2, 1000, LOW, true, 500);
-  static st::IS_CarbonMonoxide      sensor16(F("carbonMonoxide1"), PIN_CO_1, HIGH, true, 500);
-*/  
   //Special sensors/executors (uses portions of both polling and executor classes)
   static st::IS_DoorControl         sensor17(F("doorControl1"), PIN_DOORCONTROL_CONTACT_1, LOW, true, PIN_DOORCONTROL_RELAY_1, LOW, true, 1000);
-/*
-  static st::S_TimedRelay           sensor18(F("relaySwitch1"), PIN_TIMEDRELAY_1, LOW, false, 3000, 0, 1);
-  //Executors
-  static st::EX_Switch              executor1(F("switch1"), PIN_SWITCH_1, LOW, true);
-  static st::EX_Alarm               executor2(F("alarm1"), PIN_ALARM_1, LOW, true);
-  static st::EX_Alarm               executor3(F("alarm2"), PIN_ALARM_2, LOW, true, PIN_STROBE_2);
-*/
+
   //*****************************************************************************
   //  Configure debug print output from each main class 
   //  -Note: Set these to "false" if using Hardware Serial on pins 0 & 1
@@ -238,10 +211,11 @@ void setup()
   
   //Create the SmartThings ESP32WiFi Communications Object
     //STATIC IP Assignment - Recommended
-    st::Everything::SmartThing = new st::SmartThingsESP32WiFi(str_ssid, str_password, ip, gateway, subnet, dnsserver, serverPort, hubIp, hubPort, st::receiveSmartString);
+    //st::Everything::SmartThing = new st::SmartThingsESP32WiFi(str_ssid, str_password, ip, gateway, subnet, dnsserver, serverPort, hubIp, hubPort, st::receiveSmartString, "ESP32Wifi", true, 100);
  
     //DHCP IP Assigment - Must set your router's DHCP server to provice a static IP address for this device's MAC address
     //st::Everything::SmartThing = new st::SmartThingsESP32WiFi(str_ssid, str_password, serverPort, hubIp, hubPort, st::receiveSmartString);
+    st::Everything::SmartThing = new st::SmartThingsESP32WiFi(str_ssid, str_password, serverPort, hubIp, hubPort, st::receiveSmartString, "ESP32Wifi", true, 100);
 
   //Run the Everything class' init() routine which establishes WiFi communications with SmartThings Hub
   st::Everything::init();
@@ -249,33 +223,7 @@ void setup()
   //*****************************************************************************
   //Add each sensor to the "Everything" Class
   //*****************************************************************************
-  /*
-  st::Everything::addSensor(&sensor1);
-  st::Everything::addSensor(&sensor2);
-  st::Everything::addSensor(&sensor3);
-  st::Everything::addSensor(&sensor4); 
-  st::Everything::addSensor(&sensor5); 
-  st::Everything::addSensor(&sensor6); 
-  st::Everything::addSensor(&sensor7);
-  st::Everything::addSensor(&sensor8);
-  st::Everything::addSensor(&sensor9);
-  st::Everything::addSensor(&sensor10);
-  st::Everything::addSensor(&sensor11);
-  st::Everything::addSensor(&sensor12);
-  st::Everything::addSensor(&sensor13);
-  st::Everything::addSensor(&sensor14); 
-  st::Everything::addSensor(&sensor15); 
-  st::Everything::addSensor(&sensor16); */
   st::Everything::addSensor(&sensor17);
-  //st::Everything::addSensor(&sensor18);  
-      
-  //*****************************************************************************
-  //Add each executor to the "Everything" Class
-  //*****************************************************************************
-  /*
-  st::Everything::addExecutor(&executor1);
-  st::Everything::addExecutor(&executor2);
-  st::Everything::addExecutor(&executor3); */
       
   //*****************************************************************************
   //Initialize each of the devices which were added to the Everything Class
